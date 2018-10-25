@@ -19,14 +19,19 @@ $layer_id = (int)$mod->vars->layer_id;
 # Pull the layer config
 $sql = <<<EOF
 SELECT
-	source_table,
-	text_separator,
-	lock_text
+	lt.url as url,
+	l.source_table as source_table,
+	l.text_separator as text_separator,
+	l.lock_text as lock_text
 FROM
-	layers
+	layers as l
+LEFT JOIN
+        layer_types as lt
+ON
+        l.layer_type = lt.ltype_sid
 WHERE
-	NOT disabled AND
-	layer_sid = {$layer_id};
+	NOT l.disabled AND
+	l.layer_sid = {$layer_id};
 EOF;
 
 # If we can't pull the config, throw error
@@ -88,7 +93,7 @@ $shead = db_fetch_object($s_list);
     <input type='hidden' name='pair_sid' id='pair_sid' value='<?=$pair_sid?>' />
     <input type='hidden' name='rel_sid' id='rel_sid' value='<?=$rel_sid?>' />
     <input type='hidden' name='layer_id' id='layer_id' value='<?=$layer_id?>' />
-    <th class='pagingth' style='text-align: right; min-width: 80px;'>Text 1:</th>
+    <th class='pagingth' style='text-align: right; min-width: 80px;' colspan="2">Text 1:</th>
     <th class='pagingth' style='text-align: center; min-width: 700px;' colspan="3">
 <?
 
@@ -98,9 +103,11 @@ if ($layer_config->lock_text == 1) {
 	$text_1 = str_replace($delimiter," ",$pair->text_1);
 ?>
 	<?=$text_1?></th>
+<!--
 	<th class='pagingth' style='text-align: right; min-width: 80px;'>
 	<span>&nbsp;</span>
     </th>
+-->
   </tr>
 
 <?
@@ -120,7 +127,7 @@ if ($layer_config->lock_text == 1) {
 ?>
         <input type='hidden' name='<?=$token_uid?>' id='<?=$token_uid?>' value='0' />
 	<span style="cursor: pointer;" onclick="toggle(this,<?=$token_uid?>)"><u><?=$token?></u></span>
-	<span>&nbsp;</span>
+	<span></br></span>
 <?
 	# Generate the option to select the whole text
 	# This part can be commented if not usef
@@ -128,17 +135,19 @@ if ($layer_config->lock_text == 1) {
 	}
 ?> 
     </th>
+<!---
     <th class='pagingth' style='text-align: right; min-width: 80px;'>
         <input type='hidden' name='199' id='199' value='0' />
 	<span style="cursor: pointer;" onclick="toggle(this,199)"><u>Whole text</u></span>
     </th>
+-->
   </tr>
 <?
 }
 ?>
   <tr>
-    <th class='pagingth' style='text-align: right; min-width: 80px;'>Text 2:</th>
-    <th class='pagingth' style='text-align: center; min-width: 700px;' colspan="3">
+    <th class='pagingth' style='text-align: right; min-width: 80px;' colspan="2">Text 2:</th>
+    <th class='pagingth' style='text-align: left; min-width: 700px;' colspan="3">
 <?
 # Check if text2 is locked 
 if ($layer_config->lock_text == 2) {
@@ -146,9 +155,11 @@ if ($layer_config->lock_text == 2) {
 	$text_2 = str_replace($delimiter," ",$pair->text_2);
 ?>
 	<?=$text_2?></th>
+<!--
 	<th class='pagingth' style='text-align: right; min-width: 80px;'>
 	<span>&nbsp;</span>
     </th>
+-->
   </tr>
 
 <?
@@ -163,16 +174,18 @@ if ($layer_config->lock_text == 2) {
 ?>
         <input type='hidden' name='<?=$token_uid?>' id='<?=$token_uid?>' value='0' />
 	<span style="cursor: pointer;" onclick="toggle(this,<?=$token_uid?>)"><u><?=$token?></u></span>
-	<span>&nbsp;</span>
+	<span></br></span>
 <?
 	}
 ?> 
     </th>
+<!--
     <th class='pagingth' style='text-align: right; min-width: 80px;'>
         <input type='hidden' name='299' id='299' value='0' />
 	<span style="cursor: pointer;" onclick="toggle(this,299)"><u>Whole text</u></span>
 	<span>&nbsp;</span>
     </th>
+-->
   </tr>
 <?
 }
@@ -188,7 +201,7 @@ if ($shead->type_key == 1) {
 	if ($layer_config->lock_text != 1) {
 ?>
   <tr>
-    <th class='pagingth' style='text-align: right; min-width: 80px;'>Sentence 1:</th>
+    <th class='pagingth' style='text-align: right; min-width: 80px;'colspan="2">Sentence 1:</th>
     <th class='pagingth' style='text-align: center; min-width: 700px;' colspan="3">
 <?
 		$tokens = explode($delimiter,$pair->text_1);
@@ -199,7 +212,7 @@ if ($shead->type_key == 1) {
 ?>
         <input type='hidden' name='<?=$token_uid?>' id='<?=$token_uid?>' value='0' />
 	<span style="cursor: pointer;" onclick="toggle(this,<?=$token_uid?>)"><u><?=$token?></u></span>
-	<span>&nbsp;</span>
+	<span></br></span>
 <?
 		}
 ?> 
@@ -214,7 +227,7 @@ if ($shead->type_key == 1) {
 	if ($layer_config->lock_text != 2) {
 ?>
   <tr>
-    <th class='pagingth' style='text-align: right; min-width: 80px;'>Sentence 2:</th>
+    <th class='pagingth' style='text-align: right; min-width: 80px;' colspan="2">Sentence 2:</th>
     <th class='pagingth' style='text-align: center; min-width: 700px;' colspan="3">
 <?
 		$tokens = explode($delimiter,$pair->text_2);
@@ -225,7 +238,7 @@ if ($shead->type_key == 1) {
 ?>
         <input type='hidden' name='<?=$token_uid?>' id='<?=$token_uid?>' value='0' />
 	<span style="cursor: pointer;" onclick="toggle(this,<?=$token_uid?>)"><u><?=$token?></u></span>
-	<span>&nbsp;</span>
+	<span></br></span>
 <?
 		}
 ?> 
@@ -240,9 +253,13 @@ if ($shead->type_key == 1) {
 }
 ?>
   <tr>
-    <th class='pagingth' colspan="5">
+    <th class='pagingth' colspan="2">
       <input type='submit' style='display: none;' />
-      <a href='#' onclick="document.forms['form'].submit();return false;" class="btn-medium common-button"><span>Add Type</span></a>
+      <a href='#' onclick="document.location='<?=$layer_config->url?>?pair_sid=<?=$pair_sid?>&layer_id=<?=$layer_id?>';return false;" class="btn-medium common-button"><span>Cancel</span></a>
+    </th>
+    <th class='pagingth' colspan="3" style="text-align: right;">
+      <input type='submit' style='display: none;' />
+      <a href='#' onclick="document.forms['form'].submit();return false;" style='text-align: right;' class="btn-medium common-button"><span>Add Type</span></a>
     </th>
   </tr>
   </form>

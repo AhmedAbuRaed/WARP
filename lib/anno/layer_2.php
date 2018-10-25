@@ -61,8 +61,8 @@ if (!db_count_rows($data = db_query($sql))) {
 } else {
 	$input_texts = db_fetch_object($data);
 	$delimiter = (isset($layer_config->text_separator) && $layer_config->text_separator != " "?$layer_config->text_separator:" ");
-	$text_1 = str_replace($delimiter," ",$input_texts->text_1);
-	$text_2 = str_replace($delimiter," ",$input_texts->text_2);
+	$text_1 = str_replace($delimiter,"</br>",$input_texts->text_1);
+	$text_2 = str_replace($delimiter,"</br>",$input_texts->text_2);
 }
 
 # Print errors
@@ -79,7 +79,7 @@ if (isset($error_msg)&&strlen($error_msg)) {
   </tr>
   <tr>
     <th class='pagingth' colspan='1' width='25%' style='text-align: right; min-width: 160px;'><label for='text_2'>Text 2:</label>&nbsp;</th>
-    <th class='pagingth' colspan='3' style='text-align: center; min-width: 700px;'><?=$text_2?></th>
+    <th class='pagingth' colspan='3' style='text-align: left; min-width: 700px;'><?=$text_2?></th>
   </tr>
 <?
 # Check if display previous is enabled
@@ -153,8 +153,10 @@ EOF;
   <tr><th class='pagingth' colspan='4'><h4>Current Annotation</h4></th></tr>
   <tr>
     <th class='pagingth'>Type</th>
-    <th class='pagingth'>Scope</th>
+    <th class='pagingth' colspan='2'>Scope</th>
+<!--
     <th class='pagingth'>Key</th>
+-->
     <th class='pagingth'>Actions</th>
   </tr>
 <?
@@ -186,8 +188,10 @@ EOF;
 ?>
   <tr>
     <td class='pagingtd0' style='text-align: left; min-width: 120px;'><?=$row->type_name?></td>
-    <td class='pagingtd0' style='text-align: left; min-width: 320px;'>&nbsp;</td>
+    <td class='pagingtd0' colspan='2' style='text-align: left; min-width: 320px;'>&nbsp;</td>
+<!--
     <td class='pagingtd0' style='text-align: left; min-width: 240px;'>&nbsp;</td>
+-->
     <td class='pagingtd0'>
 <?
 	# In future version, here will be the option to add button for child layer
@@ -197,14 +201,18 @@ EOF;
   </tr>
   <tr>
     <td class='pagingtd1' style='text-align: right; min-width: 120px;'>Text 1</td>
-    <td class='pagingtd1'><?=$row->scope_1?></td>
+    <td class='pagingtd1' colspan='2'><?=$row->scope_1?></td>
+<!--
     <td class='pagingtd1'><?=$row->key_1?></td>
+-->
     <td class='pagingtd1'>&nbsp;</td>
   </tr>
   <tr>
     <td class='pagingtd1' style='text-align: right; min-width: 120px;'>Text 2</td>
-    <td class='pagingtd1'><?=$row->scope_2?></td>
+    <td class='pagingtd1' colspan='2'><?=$row->scope_2?></td>
+<!--
     <td class='pagingtd1'><?=$row->key_2?></td>
+-->
     <td class='pagingtd1'>&nbsp;</td>
   </tr>
 

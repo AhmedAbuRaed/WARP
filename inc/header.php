@@ -86,6 +86,7 @@ function openBODY ($menuItem=0)
 
 
       <li id="menu-item-02" class="<?=checkMenuItem($menuItem,1);?>menu-item menu-item-type-post_type menu-item-object-page" style='z-index:1000;'><a href="/anno/details">Home</a></li>
+      <li id="menu-item-02" class="<?=checkMenuItem($menuItem,2);?>menu-item menu-item-type-post_type menu-item-object-page" style='z-index:1000;'><a href="/anno/list">Review</a></li>
       <li id="menu-item-09" class="<?=checkMenuItem($menuItem,9);?>menu-item menu-item-type-post_type menu-item-object-page" style='float: right'><a href="/logout">Logout</a></li>
 <?
 		}

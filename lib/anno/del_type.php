@@ -28,7 +28,6 @@ WHERE
 	user_sid = {$user->user_sid};
 EOF;
 
-var_dump($sql);
 if (!db_count_rows($data = db_query($sql))) {
 	echo "<div class='error'>Annotation not found</div><br />";
 	killPage();
@@ -45,6 +44,7 @@ WHERE
 EOF;
 
 db_query($sql);
+
 
 ?>
 <script lang='javascript'>document.location='<?=$obj->url?>?pair_sid=<?=$obj->pair_sid?>&layer_id=<?=$obj->layer?>';</script>

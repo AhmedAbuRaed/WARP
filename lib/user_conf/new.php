@@ -69,7 +69,7 @@ INSERT INTO
 	warp_user
 	(username, password, admin, refresh, pagesize)
 VALUES
-	('{$username}', '{$password}',{$mod->vars->i_admin},2,15)
+	('{$username}', '{$password}',{$mod->vars->i_admin},0.1,15)
 EOF;
 		db_query($sql);
 

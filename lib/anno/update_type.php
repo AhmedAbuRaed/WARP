@@ -131,6 +131,7 @@ if (!db_count_rows($data = db_query($sql))) {
 
 # Split the texts by the layer delimiter
 $pair = db_fetch_object($data);
+$raw_s1 = str_replace($delimiter," ",$pair->text_1);
 $sent_1 = explode($delimiter,$pair->text_1);
 $sent_2 = explode($delimiter,$pair->text_2);
 
@@ -215,18 +216,20 @@ if(!empty($key_2)){
 	$k2_ids = "n/a";
 }
 
-$sql = <<<EOF
+if ($s2_ids != "" && $s2_text != ""){
+	# HARDCODED INSERT OF SENT1 FOR AHMED! FIX IN MAIN REPO!
+	$sql = <<<EOF
 INSERT INTO
 	annotation
 	(rel_sid, pair_sid, s1_scope, s2_scope, s1_text, s2_text, 
 	key_s1, key_s2, k1_text, k2_text, user_sid, layer, meta_sid)
 VALUES
-	({$rel_sid},{$pair_sid},"{$s1_ids}", "{$s2_ids}", "{$s1_text}", "{$s2_text}",
+	({$rel_sid},{$pair_sid},"{$s1_ids}", "{$s2_ids}", "{$raw_s1}", "{$s2_text}",
 	"{$k1_ids}", "{$k2_ids}", "{$k1_text}", "{$k2_text}", "{$user->user_sid}", {$layer_id}, {$meta_id->parent}) 
 EOF;
 
-db_query($sql);
-
+	db_query($sql);
+}
 ?>
 <script lang='javascript'>document.location='<?=$layer_config->url?>?pair_sid=<?=$pair_sid?>&layer_id=<?=$layer_id?>';</script>
 <?

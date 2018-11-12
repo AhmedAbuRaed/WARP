@@ -273,12 +273,14 @@ function toggle(e,id){
 	if(document.getElementById(id).value == 0)
   {
 	document.getElementById(id).value = 1;
-    $(e).css('background-color','blue');
+    $(e).css('background-color','green');
+    $(e).css('color','white');
   }
   else
   {
 	document.getElementById(id).value = 0;
     $(e).css('background-color','');
+    $(e).css('color','black');
   }
 }
 //]]> 
